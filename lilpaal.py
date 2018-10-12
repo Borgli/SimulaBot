@@ -1,9 +1,12 @@
 import discord
 import utils
+import tokenize
+import io
 
 from plugins import *
 
 commands = utils.commands
+no_prefix_commands = utils.no_prefix_commands
 
 
 class Bot(discord.Client):
@@ -22,13 +25,19 @@ class Bot(discord.Client):
     async def on_message(self, message):
         cmd = message.content
 
-        if len(cmd.split()) < 1 or cmd.lower().split()[0][0] != self.prefix:
+        if len(cmd.split()) < 1 or message.author.id == self.user.id:
             return
 
         # Normal commands can be awaited and is therefore in their own functions
         for key in commands:
             if cmd.lower().split()[0] == self.prefix + key:
                 await commands[key](message, self)
+                return
+
+        tokenized_cmd = list(tokenize.generate_tokens(io.StringIO(cmd.lower()).readline))
+        for key in no_prefix_commands:
+            if list(filter(lambda token: token[1] == key.lower(), tokenized_cmd)):
+                await no_prefix_commands[key.lower()](message, self)
                 return
 
 
