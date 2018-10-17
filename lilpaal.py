@@ -13,6 +13,7 @@ class Bot(discord.Client):
     def __init__(self, **options):
         super().__init__(**options)
         self.prefix = '!'
+        utils.bot = self
 
     async def on_ready(self):
         print('Logged in as')

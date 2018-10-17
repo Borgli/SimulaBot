@@ -1,7 +1,9 @@
+import sys
 from functools import wraps
 
 commands = dict()
 no_prefix_commands = dict()
+bot = None
 
 
 # Registers new commands
