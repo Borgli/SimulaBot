@@ -1,20 +1,16 @@
 import json
 import random
 import re
-from functools import partial
 
-import schedule
 import discord
 import datetime
 
-from utils import register_command, bot
+from utils import register_command
 import aiohttp
 
 TECHNOPOLIS_URL = 'https://technopolis1.herokuapp.com/parse/classes/Melding'
 
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-
-lunch_channel = '502068484684120065'
 
 
 @register_command('lunch')
@@ -44,7 +40,7 @@ async def get_todays_lunch(channel, client, day_modifier=1):
                                          'Content-Type': 'application/json',
                                          'X-Parse-Client-Key': 'anything'},
                                 data=json.dumps({
-                                    'limit': '2',
+                                    'limit': '10',
                                     'where': {
                                         'kategori_navn': {
                                             '$eq': "ISS Restaurant"
@@ -75,28 +71,25 @@ async def get_todays_lunch(channel, client, day_modifier=1):
 def get_asia_today(result_list):
     for entry in result_list:
         if entry['tekst'] == 'Asia today' or re.match(r'(?:\n|\t|^|\r\n)(.*)(?:\n|\r\n|$)', entry['langBeskrivelse']).lastindex == 2:
-            return 'Asia today', entry['langBeskrivelse'].replace('\t', '')
-    return 'Asia today', "Could not find today's menu."
+            return 'Asia today (10:30 - 13:30)', entry['langBeskrivelse'].replace('\t', '')
+    return 'Asia today (10:30 - 13:30)', "Ser ikke ut til at det er en asiatisk meny idag :ramen:"
 
 
 def get_transit(result_list, today):
     tomorrow = '$' if today == 'Friday' else days[days.index(today)+1]
     for entry in result_list:
-        menu = re.search(r'Transit.*?{}.*?\n*(.*?){}'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
+        menu = re.search(r'Transit.*?{}.*?\n*(.*?)(?:Expedition|{})'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
         if menu:
-            return 'Transit', menu.group(1).strip(':\t\r\n')
+            return 'Transit (10:30 - 13:30)', "\n".join(map(lambda x: x.strip(),
+                                                        menu.group(1).strip(':\t\r\n').split('\r\n')))
+    return 'Transit (10:30 - 13:30)', 'Sorry amigo, fant ikke menyen idag... :shrug:'
 
 
 def get_expedition(result_list, today):
     tomorrow = '$' if today == 'Friday' else days[days.index(today) + 1]
     for entry in result_list:
-        menu = re.search(r'Expedition.*?{}.*?\n*(.*?){}'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
+        menu = re.search(r'Expedition.*?{}.*?\n*(.*?)(?:Transit|{})'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
         if menu:
-            return 'Expedition', menu.group(1).strip(':\t\r\n')
-
-
-schedule.every().monday.do(partial(get_todays_lunch, channel=lunch_channel, client=bot)).at("09:00")
-schedule.every().tuesday.do(partial(get_todays_lunch, channel=lunch_channel, client=bot)).at("09:00")
-schedule.every().wednesday.do(partial(get_todays_lunch, channel=lunch_channel, client=bot)).at("09:00")
-schedule.every().thursday.do(partial(get_todays_lunch, channel=lunch_channel, client=bot)).at("09:00")
-schedule.every().friday.do(partial(get_todays_lunch, channel=lunch_channel, client=bot)).at("09:00")
+            return 'Expedition (10:30 - 13:30)', "\n".join(map(lambda x: x.strip(),
+                                                           menu.group(1).strip(':\t\r\n').split('\r\n')))
+    return 'Expedition (10:30 - 13:30)', 'Sorry kompis, fant ikke menyen idag... :shrug:'

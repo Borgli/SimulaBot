@@ -1,8 +1,11 @@
+import asyncio
 import discord
 import utils
 import tokenize
 import io
+import inspect
 
+# Initializes all plugins
 from plugins import *
 
 commands = utils.commands
@@ -22,6 +25,8 @@ class Bot(discord.Client):
         print(discord.version_info)
         print(discord.__version__)
         print('------')
+        for func_name, startup_function in inspect.getmembers(startup_functions, inspect.isfunction):
+            await startup_function(self)
 
     async def on_message(self, message):
         cmd = message.content
