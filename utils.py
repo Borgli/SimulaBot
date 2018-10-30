@@ -5,7 +5,6 @@ commands = dict()
 no_prefix_commands = dict()
 bot = None
 
-
 # Registers new commands
 def register_command(*args):
     def wrapper(func):
@@ -22,7 +21,6 @@ def register_command(*args):
 
     return wrapper
 
-
 # Registers new commands
 def register_command_no_prefix(*args):
     def wrapper(func):
@@ -38,7 +36,6 @@ def register_command_no_prefix(*args):
         return wrapped
 
     return wrapper
-
 
 class CommandAlreadyExistsError(BaseException):
     def __init__(self, command):
