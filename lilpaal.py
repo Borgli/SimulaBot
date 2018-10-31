@@ -11,7 +11,6 @@ from plugins import *
 commands = utils.commands
 no_prefix_commands = utils.no_prefix_commands
 
-
 class Bot(discord.Client):
     def __init__(self, **options):
         super().__init__(**options)
@@ -46,7 +45,6 @@ class Bot(discord.Client):
                 await no_prefix_commands[key.lower()](message, self)
                 return
 
-
 def run_bot():
     client = Bot()
 
@@ -56,7 +54,6 @@ def run_bot():
 
     # Starts the execution of the bot
     client.run(token)
-
 
 if __name__ == '__main__':
     run_bot()

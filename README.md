@@ -1,2 +1,2 @@
 # SimulaBot
-A Discord bot for the Simula Master student Discord channel
+A Discord bot for the Simula Master student Discord channel.
