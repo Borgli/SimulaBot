@@ -57,11 +57,13 @@ async def run_scheduler(client):
             return ret
 
     lunch_schedule = LunchSchedule()
-    lunch_schedule.every().monday.do(partial(get_todays_lunch, channel=lunch_channel, client=client)).at("09:00")
-    lunch_schedule.every().tuesday.do(partial(get_todays_lunch, channel=lunch_channel, client=client)).at("09:00")
-    lunch_schedule.every().wednesday.do(partial(get_todays_lunch, channel=lunch_channel, client=client)).at("09:00")
-    lunch_schedule.every().thursday.do(partial(get_todays_lunch, channel=lunch_channel, client=client)).at("09:00")
-    lunch_schedule.every().friday.do(partial(get_todays_lunch, channel=lunch_channel, client=client)).at("09:00")
+
+    lunch_time = "09:00"
+    lunch_schedule.every().monday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
+    lunch_schedule.every().tuesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
+    lunch_schedule.every().wednesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
+    lunch_schedule.every().thursday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
+    lunch_schedule.every().friday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
 
     while True:
         await lunch_schedule.run_pending()
