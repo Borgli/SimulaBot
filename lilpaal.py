@@ -11,6 +11,7 @@ from plugins import *
 commands = utils.commands
 no_prefix_commands = utils.no_prefix_commands
 
+
 class Bot(discord.Client):
     def __init__(self, **options):
         super().__init__(**options)
@@ -25,7 +26,8 @@ class Bot(discord.Client):
         print(discord.__version__)
         print('------')
         for func_name, startup_function in inspect.getmembers(startup_functions, inspect.isfunction):
-            await startup_function(self)
+            asyncio.ensure_future(startup_function(self))
+        print('Setup done!')
 
     async def on_message(self, message):
         cmd = message.content
@@ -45,6 +47,7 @@ class Bot(discord.Client):
                 await no_prefix_commands[key.lower()](message, self)
                 return
 
+
 def run_bot():
     client = Bot()
 
@@ -54,6 +57,7 @@ def run_bot():
 
     # Starts the execution of the bot
     client.run(token)
+
 
 if __name__ == '__main__':
     run_bot()

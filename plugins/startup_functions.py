@@ -58,7 +58,7 @@ async def run_scheduler(client):
 
     lunch_schedule = LunchSchedule()
 
-    lunch_time = "09:00"
+    lunch_time = "10:30"
     lunch_schedule.every().monday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
     lunch_schedule.every().tuesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
     lunch_schedule.every().wednesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
@@ -67,4 +67,4 @@ async def run_scheduler(client):
 
     while True:
         await lunch_schedule.run_pending()
-        await asyncio.sleep(1)
+        await asyncio.sleep(60)

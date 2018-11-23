@@ -70,7 +70,8 @@ async def get_todays_lunch(channel, client, day_modifier=1):
 
 def get_asia_today(result_list):
     for entry in result_list:
-        if entry['tekst'] == 'Asia today' or re.match(r'(?:\n|\t|^|\r\n)(.*)(?:\n|\r\n|$)', entry['langBeskrivelse']).lastindex == 2:
+        if entry['tekst'] == 'Asia today' or re.match(r'(?:\n|\t|^|\r\n)(.*)(?:\n|\r\n|$)',
+                                                      entry['langBeskrivelse']).lastindex == 2:
             return 'Asia today (10:30 - 13:30)', entry['langBeskrivelse'].replace('\t', '')
     return 'Asia today (10:30 - 13:30)', "Ser ikke ut til at det er en asiatisk meny idag :ramen:"
 
@@ -78,7 +79,8 @@ def get_asia_today(result_list):
 def get_transit(result_list, today):
     tomorrow = '$' if today == 'Friday' else days[days.index(today)+1]
     for entry in result_list:
-        menu = re.search(r'Transit.*?{}.*?\n*(.*?)(?:Expedition|{})'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
+        menu = re.search(r'Transit.*?{}.*?\n*(.*?)(?:Expedition|{})'.format(today, tomorrow),
+                         entry['langBeskrivelse'], flags=re.DOTALL)
         if menu:
             return 'Transit (10:30 - 13:30)', "\n".join(map(lambda x: x.strip(),
                                                         menu.group(1).strip(':\t\r\n').split('\r\n')))
@@ -88,7 +90,8 @@ def get_transit(result_list, today):
 def get_expedition(result_list, today):
     tomorrow = '$' if today == 'Friday' else days[days.index(today) + 1]
     for entry in result_list:
-        menu = re.search(r'Expedition.*?{}.*?\n*(.*?)(?:Transit|{})'.format(today, tomorrow), entry['langBeskrivelse'], flags=re.DOTALL)
+        menu = re.search(r'Expedition.*?{}.*?\n*(.*?)(?:Transit|{})'.format(today, tomorrow),
+                         entry['langBeskrivelse'], flags=re.DOTALL)
         if menu:
             return 'Expedition (10:30 - 13:30)', "\n".join(map(lambda x: x.strip(),
                                                            menu.group(1).strip(':\t\r\n').split('\r\n')))
