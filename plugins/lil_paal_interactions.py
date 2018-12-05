@@ -2,7 +2,7 @@ import random
 
 from utils import register_command_no_prefix
 
-monster_drinkers = ['asadsa#8370', 'hustad#9941', 'Nicolactic#5840']
+monster_drinkers = ['417688746943578112', '386258460225961995', '137294785026326529']
 
 @register_command_no_prefix('professor', 'prof', 'professoren')
 async def blush(message, client):
