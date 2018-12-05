@@ -2,6 +2,7 @@ import random
 
 from utils import register_command_no_prefix
 
+monster_drinkers = ['417688746943578112', '386258460225961995', '137294785026326529']
 
 @register_command_no_prefix('professor', 'prof', 'professoren')
 async def blush(message, client):
@@ -27,11 +28,14 @@ async def cola(message, client):
 
 @register_command_no_prefix('bolle', 'bollerun')
 async def bolle(message, client):
-    await client.send_message(message.channel, '... og cola? :yum:')
+    if message.author.id in monster_drinkers:
+        await client.send_message(message.channel, '... og monster? :yum:')
+    else:
+        await client.send_message(message.channel, '... og cola? :yum:')
 
 
 @register_command_no_prefix('syk', 'sick')
-async def bolle(message, client):
+async def syk(message, client):
     await client.send_message(message.channel, 'Uffda! God bedring :bouquet:')
 
 
