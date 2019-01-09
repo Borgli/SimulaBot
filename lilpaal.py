@@ -10,6 +10,7 @@ from plugins import *
 
 commands = utils.commands
 no_prefix_commands = utils.no_prefix_commands
+startup = True
 
 
 class Bot(discord.Client):
@@ -25,8 +26,12 @@ class Bot(discord.Client):
         print(discord.version_info)
         print(discord.__version__)
         print('------')
-        for func_name, startup_function in inspect.getmembers(startup_functions, inspect.isfunction):
-            asyncio.ensure_future(startup_function(self))
+        global startup
+        if startup:
+            print("Running startup functions.")
+            for func_name, startup_function in inspect.getmembers(startup_functions, inspect.isfunction):
+                asyncio.ensure_future(startup_function(self))
+            startup = False
         print('Setup done!')
 
     async def on_message(self, message):
