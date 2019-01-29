@@ -30,7 +30,7 @@ class Bot(discord.Client):
         if startup:
             print("Running startup functions.")
             for func_name, startup_function in inspect.getmembers(startup_functions, inspect.isfunction):
-                asyncio.ensure_future(startup_function(self))
+                asyncio.get_event_loop().create_task(startup_function(self))
             startup = False
         print('Setup done!')
 
