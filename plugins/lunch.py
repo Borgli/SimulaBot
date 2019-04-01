@@ -156,7 +156,7 @@ async def run_lunch_scheduler(client):
 
     lunch_schedule = AsyncSchedule()
 
-    lunch_time = "10:30"
+    lunch_time = "08:30"
     lunch_schedule.every().monday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
     lunch_schedule.every().tuesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
     lunch_schedule.every().wednesday.at(lunch_time).do(partial(get_todays_lunch, channel=lunch_channel, client=client))
